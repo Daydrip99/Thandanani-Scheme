@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .header {
+      text-align: center;
+      border-bottom: rgba(0, 0, 0, 0.2) solid 1px;
+      padding: 15px;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      background-color: white;
+    }
+    .header a {
+      text-decoration: none;
+      color: black;
+      padding: 6px;
+    }
+    .home-section {
+      padding-top: 95px;
+      background-color: rgb(254, 177, 35);
+    }
+    .home-content {
+      text-align: center;
+      padding: 50px;
+      align-items: center;
+    }
+    .home-title {
+      font-size: 2.5rem;
+      padding-bottom: 20px;
+    }
+    .home-rules {
+      padding-top: 10px;
+      text-align: center;
+      display: flex;
+      border-radius: 7px;
+      border-width: ;
+    }
+    .home-description,
+    .home-rules {
+      border: 2px solid #333; /* You can change the color and width */
+      border-radius: 7px;
+      padding: 16px;
+      background: #fff8e1; /* Optional: adds a light background */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .home-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .home-description {
+      border-width: 3px;
+    }
+    .groups-section {
+      padding: 50px;
+      background-color: rgb(1, 141, 255);
+      color: white;
+    }
+    .groups-content {
+      text-align: center;
+    }
+    .groups-title {
+      font-size: 2.5rem;
+    }
+    .groups-overview {
+      padding: 20px;
+      font-size: 1.2rem;
+    }
+  </style>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <div
+          class="logo"
+          style="font-size: 30px; font-weight: bold; padding-bottom: 5px"
+        >
+          Thandanani Stokvel
+        </div>
+        <nav class="nav">
+          <a href="#home">Home</a>
+          <a href="#groups">Groups</a>
+          <a href="#buyingGroups">Buying Groups</a>
+          <a href="#contactAdmin">Contact Admin</a>
+        </nav>
+      </div>
+    </header>
+    <!-- Home Section -->
+
+    <section class="home-section">
+      <div class="home-content">
+        <h1 class="home-title">Welcome to Thandanani Stokvel!</h1>
+        <!--I think adding the rules and stuff here would be a good idea-->
+        <div class="home-grid">
+          <div class="home-description-and-rules">
+            <p class="home-description">
+              <strong>Mission:</strong> To foster a supportive community that
+              encourages saving and investment. This website is dedicated to the
+              Thandanani Stokvel, a community-driven initiative that brings
+              people together to save, invest, and support each other. Our goal
+              is to empower individuals through collective financial efforts and
+              shared resources.
+            </p>
+          </div>
+          <div class="home-rules">
+            <p>
+              <strong>Rules:</strong>Here you can find the rules, guidelines,
+              and important information about how our stokvel operates. Please
+              read carefully to understand your rights and responsibilities as a
+              member.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Groups Section -->
+    <!--This section is going to use a bit of javascript to dynamically add and remove members. This section is going to show the main members and their submembers too. The main member is going to have the ability to add and remove the members under them too and they are going to be able to see who is deceased and who isn't.-->
+    <section class="groups-section">
+      <div class="groups-content">
+        <h1 class="groups-title">Groups</h1>
+        <p class="groups-overview">
+          The following are the groups available and the members within them.
+        </p>
+        <div class="group-hero-card">
+          <!--Here is where the main members and their sub-members will go-->
+        </div>
+      </div>
+    </section>
+    <section style="color: rgb(141, 141, 255)">
+      <!-- Buying Groups Section -->
+      <!-- This section is going to show each group is going to buy whenever someone is deceased. There is 3 people per group and there are 21 groups in total. There is a designated list that will automatically update when someone has passed away.For example, when a submember passes away, group 1 will buy items from group 1 on that grocery list and group 2 will buy the items from group 2 on the grocery list and so on. Every member will be able to tick themselves off whenever they have bought the items on that list.  -->
+      <div class="buying-groups">
+        <h1 class="buying-groups-title">Grocery Groups</h1>
+        <p>
+          The following are the grocery groups and what they need to buy should
+          a member pass away:
+        </p>
+        <div class="group-hero-card"></div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2023 Thandanani Stokvel. All rights reserved.</p>
+      <p>
+        Contact us at:
+        <a href="mailto:info@thandanani-stokvel.com"
+          >info@thandanani-stokvel.com</a
+        >
+      </p>
+    </footer>
+  </body>
+  <script>
+    //Member and Sub-Member Data
+    const members = [
+      {
+        id: "1",
+        name: "John Doe",
+        subMembers: [
+          { id: "1-1", name: "Jane Doe" },
+          { id: "1-2", name: "Jim Doe" },
+        ],
+      },
+      {
+        id: "2",
+        name: "Alice Smith",
+        subMembers: [
+          { id: "2-1", name: "Bob Smith" },
+          { id: "2-2", name: "Charlie Smith" },
+        ],
+      },
+      {
+        id: "3",
+        name: "Thando Zande",
+        subMembers: [
+          { id: "3-1", name: "Thando Thlal" },
+          { id: "3-2", name: "Thando Moyo" },
+        ],
+      },
+      {
+        id: "4",
+        name: "Thando Moyo",
+        subMembers: [
+          { id: "4-1", name: "Thando Thlal" },
+          { id: "4-2", name: "Thando Zande" },
+        ],
+      },
+      {
+        id: "5",
+        name: "Thando Thlal",
+        subMembers: [
+          { id: "5-1", name: "Thando Moyo" },
+          { id: "5-2", name: "Thando Zande" },
+        ],
+      },
+      {
+        id: "6",
+        name: "Thando Zande",
+        subMembers: [
+          { id: "6-1", name: "Thando Thlal" },
+          { id: "6-2", name: "Thando Moyo" },
+        ],
+      },
+      {
+        id: "7",
+        name: "Thando Moyo",
+        subMembers: [
+          { id: "7-1", name: "Thando Zande" },
+          { id: "7-2", name: "Thando Thlal" },
+        ],
+      },
+    ];
+    //Function to display the members and their sub-members
+  </script>
+</html>
