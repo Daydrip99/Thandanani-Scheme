@@ -62,6 +62,7 @@
     }
     .home-description {
       border-width: 3px;
+      padding: 20px;
     }
     .groups-section {
       padding: 50px;
@@ -77,6 +78,75 @@
     .groups-overview {
       padding: 20px;
       font-size: 1.2rem;
+    }
+    .constitution {
+      padding: 20px;
+      text-align: center;
+      background-color: #f0f0f0;
+      border-radius: 7px;
+      margin-top: 20px;
+      border: 2px solid black;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    @media (max-width: 768px) {
+      .home-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .rules-button {
+      background-color: #0066ff;
+      cursor: pointer;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 10px;
+      box-shadow: #333 0px 1px 2px;
+    }
+    .rules-button:hover {
+      background-color: #3b89ff;
+    }
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Sit on top of page content */
+      z-index: 999; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(
+        0,
+        0,
+        0,
+        0.5
+      ); /* Black background with transparency */
+    }
+
+    /* Modal Content Box */
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto; /* 15% from top and centered */
+      padding: 30px;
+      border-radius: 8px;
+      width: 80%; /* Could be more or less, depending on screen size */
+      max-height: 80vh;
+      overflow: auto; /* Enable scroll if content is too long */
+    }
+
+    /* Close Button */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: black;
     }
   </style>
   <body>
@@ -118,9 +188,93 @@
               <strong>Rules:</strong>Here you can find the rules, guidelines,
               and important information about how our stokvel operates. Please
               read carefully to understand your rights and responsibilities as a
-              member.
+              member. <br />
+              <button class="rules-button" id="openModalBtn">Read Rules</button>
             </p>
+            <!--Modal stuff-->
+            <div id="myModal" class="modal">
+              <div class="modal-content">
+                <span id="closeModalBtn" class="close">&times;</span>
+                <h2>Info Window</h2>
+                <p>
+                  1. Committee Members The following members have been selected
+                  to form the Committee: - Mapule Chiloane - Buhle Mosemola -
+                  Maki Rapholo - The Gentleman (standing invitee) <br />2.
+                  Reporting Funerals Members must report funerals to Mapule or
+                  other Committee members within 48 hours. For emergency
+                  funerals, members must report within 24 hours. <br />3.
+                  Contributions Members will contribute R55 per burial. An
+                  additional R50 will be contributed whenever a member and/or
+                  spouse is deceased. <br />4. Grocery Contributions Members
+                  must submit their allocated groceries according to the group
+                  list. Only known brands are allowed and no name brands are not
+                  permitted. <br />4.1 Responsibility for Correct Items Members
+                  are responsible for purchasing the correct items as allocated
+                  to their group. Members must check the expiry dates of all
+                  products. Failure to do so will result in a fine. <br />4.2
+                  Submission Deadline All groceries must be submitted by 12:00
+                  pm on the communicated date or day. <br />
+                  5. New Member Waiting Period <br />5.1 Those joining in
+                  January must pay a R400 joining fee. <br />5.2 Those who want
+                  to be on standby must have R400 ready in case a slot becomes
+                  available. <br />6. Fines The following fines will be imposed:
+                  - R50 for purchasing incorrect items . The Member will be
+                  given until the deadline to purchase the correct items falling
+                  which fine will be imposed. - R50 for late submission of
+                  groceries after the submission deadline - R50 for any other
+                  breach of the Constitution or rules of the scheme <br />7. Use
+                  of Fine Monies <br />7.1 Fine and joining fee monies will be
+                  used to buy groceries if members leave the group while there's
+                  no replacement. <br />7.2 Committee members will go to the
+                  Bank and open a club account where all monies will be banked
+                  and be withdrawn if a need arises. <br />8. Death Certificate
+                  Requirement No groceries will be issued without a copy of the
+                  death certificate. <br />9. Non-Contributing Members Members
+                  who fail to contribute after 2 funerals will be struck off the
+                  scheme. They must repay any benefits they have received. If
+                  they have not received any benefits, the Committee will issue
+                  a notice of termination with immediate effect. <br />10.
+                  Governing Law This scheme is governed by the laws of the
+                  Republic of South Africa. <br>10.1 Dispute Resolution Any disputes
+                  arising from the interpretation or implementation of this
+                  Constitution shall be resolved through mediation or other
+                  dispute resolution mechanisms as agreed upon by the parties.
+                  <br>11. Terms of Reference: Defaulting Members In the event of a
+                  member defaulting on their contributions or failing to repay
+                  benefits, the following steps will be taken: <br>11.1 A letter of
+                  demand will be sent to the defaulting member, outlining the
+                  amount owed, the reason for the demand and a deadline for
+                  payment (minimum 7 days). <br>11.2 Follow-up: If the member fails
+                  to respond or make payment within the specified deadline, a
+                  follow-up letter or phone call will be made to remind them of
+                  their obligations. <br>11.3 Mediation: If the member still fails
+                  to respond or make payment, the Committee may attempt to
+                  resolve the matter through mediation. <br>11.4 Legal Action: If
+                  all other efforts fail, the Committee reserves the right to
+                  take legal action against the defaulting member to recover the
+                  outstanding amount. By joining the Thandanani Groceries
+                  Funeral Scheme, members acknowledge that they are aware of and
+                  agree to this Constitution and its Terms of Reference.
+                </p>
+              </div>
+            </div>
           </div>
+        </div>
+        <div class="constitution">
+          <ul style="font-size: 1.1rem; padding-bottom: 5px">
+            <b>Committee members and their contact information:</b>
+          </ul>
+          <li>Mapule Chiloane - 072 398 2229</li>
+          <li>Buhle Masemola - 073 397 1622</li>
+          <li>Maki Rapholo - 082 923 4017</li>
+          <p style="padding-top: 10px">
+            <b style="font-size: 1.1rem">Delivery Address is as follows:</b
+            ><br />
+            7826 Khokhhonoka Street <br />
+            Ext 8<br />
+            Marimba <br />
+            Vosloorus
+          </p>
         </div>
       </div>
     </section>
@@ -221,6 +375,28 @@
         ],
       },
     ];
+    // Get elements
+    const modal = document.getElementById("myModal");
+    const openBtn = document.getElementById("openModalBtn");
+    const closeBtn = document.getElementById("closeModalBtn");
+
+    // Open modal
+    openBtn.onclick = function () {
+      modal.style.display = "block";
+    };
+
+    // Close modal
+    closeBtn.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // Close modal when clicking outside content
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
     //Function to display the members and their sub-members
   </script>
 </html>
