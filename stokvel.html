@@ -195,61 +195,61 @@
             <div id="myModal" class="modal">
               <div class="modal-content">
                 <span id="closeModalBtn" class="close">&times;</span>
-                <h2>Info Window</h2>
+                <u><h2 style="padding: 10px; font-weight: bold;">Constitution and Terms of Service.</h2></u>
                 <p>
                   1. Committee Members The following members have been selected
-                  to form the Committee: - Mapule Chiloane - Buhle Mosemola -
-                  Maki Rapholo - The Gentleman (standing invitee) <br />2.
-                  Reporting Funerals Members must report funerals to Mapule or
+                  to form the Committee: <br> - Mapule Chiloane <br>- Buhle Mosemola <br>-
+                  Maki Rapholo <br>- The Gentleman (standing invitee) <br><br />2.
+                  Reporting funerals members must report funerals to Mapule or
                   other Committee members within 48 hours. For emergency
-                  funerals, members must report within 24 hours. <br />3.
+                  funerals, members must report within 24 hours. <br><br />3.
                   Contributions Members will contribute R55 per burial. An
                   additional R50 will be contributed whenever a member and/or
-                  spouse is deceased. <br />4. Grocery Contributions Members
+                  spouse is deceased. <br><br />4. Grocery Contributions Members
                   must submit their allocated groceries according to the group
                   list. Only known brands are allowed and no name brands are not
-                  permitted. <br />4.1 Responsibility for Correct Items Members
+                  permitted. <br><br />4.1 Responsibility for Correct Items Members
                   are responsible for purchasing the correct items as allocated
                   to their group. Members must check the expiry dates of all
-                  products. Failure to do so will result in a fine. <br />4.2
+                  products. Failure to do so will result in a fine. <br><br />4.2
                   Submission Deadline All groceries must be submitted by 12:00
                   pm on the communicated date or day. <br />
-                  5. New Member Waiting Period <br />5.1 Those joining in
+                  5. New Member Waiting Period <br><br />5.1 Those joining in
                   January must pay a R400 joining fee. <br />5.2 Those who want
                   to be on standby must have R400 ready in case a slot becomes
-                  available. <br />6. Fines The following fines will be imposed:
+                  available. <br><br />6. Fines The following fines will be imposed:
                   - R50 for purchasing incorrect items . The Member will be
                   given until the deadline to purchase the correct items falling
                   which fine will be imposed. - R50 for late submission of
                   groceries after the submission deadline - R50 for any other
-                  breach of the Constitution or rules of the scheme <br />7. Use
-                  of Fine Monies <br />7.1 Fine and joining fee monies will be
+                  breach of the Constitution or rules of the scheme <br><br />7. Use
+                  of Fine Monies <br><br />7.1 Fine and joining fee monies will be
                   used to buy groceries if members leave the group while there's
-                  no replacement. <br />7.2 Committee members will go to the
+                  no replacement. <br><br />7.2 Committee members will go to the
                   Bank and open a club account where all monies will be banked
-                  and be withdrawn if a need arises. <br />8. Death Certificate
+                  and be withdrawn if a need arises. <br><br />8. Death Certificate
                   Requirement No groceries will be issued without a copy of the
-                  death certificate. <br />9. Non-Contributing Members Members
+                  death certificate. <br><br />9. Non-Contributing Members Members
                   who fail to contribute after 2 funerals will be struck off the
                   scheme. They must repay any benefits they have received. If
                   they have not received any benefits, the Committee will issue
-                  a notice of termination with immediate effect. <br />10.
+                  a notice of termination with immediate effect. <br><br />10.
                   Governing Law This scheme is governed by the laws of the
-                  Republic of South Africa. <br>10.1 Dispute Resolution Any disputes
+                  Republic of South Africa. <br><br>10.1 Dispute Resolution Any disputes
                   arising from the interpretation or implementation of this
                   Constitution shall be resolved through mediation or other
                   dispute resolution mechanisms as agreed upon by the parties.
                   <br>11. Terms of Reference: Defaulting Members In the event of a
                   member defaulting on their contributions or failing to repay
-                  benefits, the following steps will be taken: <br>11.1 A letter of
+                  benefits, the following steps will be taken: <br><br>11.1 A letter of
                   demand will be sent to the defaulting member, outlining the
                   amount owed, the reason for the demand and a deadline for
-                  payment (minimum 7 days). <br>11.2 Follow-up: If the member fails
+                  payment (minimum 7 days). <br><br>11.2 Follow-up: If the member fails
                   to respond or make payment within the specified deadline, a
                   follow-up letter or phone call will be made to remind them of
-                  their obligations. <br>11.3 Mediation: If the member still fails
+                  their obligations. <br><br>11.3 Mediation: If the member still fails
                   to respond or make payment, the Committee may attempt to
-                  resolve the matter through mediation. <br>11.4 Legal Action: If
+                  resolve the matter through mediation. <br><br>11.4 Legal Action: If
                   all other efforts fail, the Committee reserves the right to
                   take legal action against the defaulting member to recover the
                   outstanding amount. By joining the Thandanani Groceries
@@ -287,12 +287,12 @@
         <p class="groups-overview">
           The following are the groups available and the members within them.
         </p>
-        <div class="group-hero-card">
+        <div class="group-cards">
           <!--Here is where the main members and their sub-members will go-->
         </div>
       </div>
     </section>
-    <section style="color: rgb(141, 141, 255)">
+    <section style="background-color: rgb(141, 141, 255)">
       <!-- Buying Groups Section -->
       <!-- This section is going to show each group is going to buy whenever someone is deceased. There is 3 people per group and there are 21 groups in total. There is a designated list that will automatically update when someone has passed away.For example, when a submember passes away, group 1 will buy items from group 1 on that grocery list and group 2 will buy the items from group 2 on the grocery list and so on. Every member will be able to tick themselves off whenever they have bought the items on that list.  -->
       <div class="buying-groups">
@@ -301,7 +301,7 @@
           The following are the grocery groups and what they need to buy should
           a member pass away:
         </p>
-        <div class="group-hero-card"></div>
+        <div class="group-hero-card"><!--This section will hold all the MAIN memebers and what they will buy person. --></div>
       </div>
     </section>
 
@@ -375,6 +375,7 @@
         ],
       },
     ];
+    //The following elements are for making the Read Rules button work, these will be used to open a "popup" so the user can read the rules(and maybe accept them).
     // Get elements
     const modal = document.getElementById("myModal");
     const openBtn = document.getElementById("openModalBtn");
@@ -397,6 +398,7 @@
       }
     };
 
-    //Function to display the members and their sub-members
+   //This section below is going to be used to show the which members are buying what.
+   
   </script>
 </html>
