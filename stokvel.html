@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Thandanani Stokvel</title>
   </head>
   <style>
     * {
@@ -48,10 +48,10 @@
     }
     .home-description,
     .home-rules {
-      border: 2px solid #333; /* You can change the color and width */
+      border: 2px solid #333;
       border-radius: 7px;
       padding: 16px;
-      background: #fff8e1; /* Optional: adds a light background */
+      background: #fff8e1;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
     .home-grid {
@@ -109,32 +109,27 @@
     }
     /* The Modal (background) */
     .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Sit on top of page content */
-      z-index: 999; /* Sit on top */
+      display: none;
+      position: fixed;
+      z-index: 999;
       left: 0;
       top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgba(
-        0,
-        0,
-        0,
-        0.5
-      ); /* Black background with transparency */
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
     }
 
     /* Modal Content Box */
     .modal-content {
       background-color: #fff;
-      margin: 15% auto; /* 15% from top and centered */
+      margin: 15% auto;
       padding: 30px;
       padding-bottom: 50px;
       border-radius: 8px;
-      width: 80%; /* Could be more or less, depending on screen size */
+      width: 80%;
       max-height: 80vh;
-      overflow: auto; /* Enable scroll if content is too long */
+      overflow: auto;
       scroll-behavior: smooth;
     }
 
@@ -171,7 +166,6 @@
       padding-top: 20px;
       padding-bottom: 15px;
       font-size: 2.5rem;
-
     }
     .buying-groups {
       text-align: center;
@@ -179,6 +173,83 @@
     .buying-groups-section {
       color: white;
       padding: 50px;
+    }
+    .group {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 15px;
+      color: black;
+      text-align: left;
+    }
+    .group h3 {
+      margin: 0 0 15px;
+      color: #333;
+      font-size: 1.3rem;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 8px;
+    }
+    .dependents {
+      margin-top: 15px;
+    }
+    .dependent {
+      display: flex;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .dependent input {
+      flex: 1;
+      margin-right: 10px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .dependent-label {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #555;
+    }
+    button {
+      margin: 2px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .add-btn {
+      background-color: #28a745;
+      color: white;
+    }
+    .add-btn:hover {
+      background-color: #218838;
+    }
+    .remove-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+    .remove-btn:hover {
+      background-color: #c82333;
+    }
+    .remove-group-btn {
+      background-color: #6c757d;
+      color: white;
+    }
+    .remove-group-btn:hover {
+      background-color: #5a6268;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    footer a {
+      color: #fea823;
+    }
+    .input-row {
+      padding: 5px;
     }
   </style>
   <body>
@@ -200,10 +271,9 @@
     </header>
     <!-- Home Section -->
 
-    <section class="home-section">
+    <section class="home-section" id="home">
       <div class="home-content">
         <h1 class="home-title">Welcome to Thandanani Stokvel!</h1>
-        <!--I think adding the rules and stuff here would be a good idea-->
         <div class="home-grid">
           <div class="home-description-and-rules">
             <p class="home-description">
@@ -217,7 +287,7 @@
           </div>
           <div class="home-rules">
             <p>
-              <strong>Rules:</strong>Here you can find the rules, guidelines,
+              <strong>Rules:</strong> Here you can find the rules, guidelines,
               and important information about how our stokvel operates. Please
               read carefully to understand your rights and responsibilities as a
               member. <br />
@@ -320,21 +390,25 @@
     </section>
 
     <!-- Groups Section -->
-    <!--This section is going to use a bit of javascript to dynamically add and remove members. This section is going to show the main members and their submembers too. The main member is going to have the ability to add and remove the members under them too and they are going to be able to see who is deceased and who isn't.-->
-    <section class="groups-section">
+    <section class="groups-section" id="groups">
       <div class="groups-content">
         <h1 class="groups-title">Groups</h1>
         <p class="groups-overview">
           The following are the groups available and the members within them.
         </p>
         <div class="group-cards">
-          <!--Here is where the main members and their sub-members will go-->
+          <h1 style="padding-bottom: 1rem">Individual Members & Dependents</h1>
+          <div id="groupsContainer"></div>
         </div>
       </div>
     </section>
-    <section style="background-color: rgb(141, 141, 255)" class="buying-groups-section">
+
+    <section
+      style="background-color: rgb(141, 141, 255)"
+      class="buying-groups-section"
+      id="buyingGroups"
+    >
       <!-- Buying Groups Section -->
-      <!-- This section is going to show each group is going to buy whenever someone is deceased. There is 3 people per group and there are 21 groups in total. There is a designated list that will automatically update when someone has passed away.For example, when a submember passes away, group 1 will buy items from group 1 on that grocery list and group 2 will buy the items from group 2 on the grocery list and so on. Every member will be able to tick themselves off whenever they have bought the items on that list.  -->
       <div class="buying-groups">
         <h1 class="buying-groups-title">Grocery Groups</h1>
         <p>
@@ -342,11 +416,10 @@
           a member pass away:
         </p>
         <div class="group-hero-card">
-          <!--This section will hold all the MAIN memebers and what they will buy person. -->
-         <u> <h1 style="padding-top: 1rem;">Buying Groups Manager</h1></u>
+          <u> <h1 style="padding-top: 1rem">Buying Groups Manager</h1></u>
           <table>
             <thead>
-              <tr style="color: black;">
+              <tr style="color: black">
                 <th>Group</th>
                 <th>Members</th>
                 <th>Assigned Grocery Group</th>
@@ -358,7 +431,7 @@
       </div>
     </section>
 
-    <footer>
+    <footer id="contactAdmin">
       <p>&copy; 2023 Thandanani Stokvel. All rights reserved.</p>
       <p>
         Contact us at:
@@ -369,89 +442,94 @@
     </footer>
   </body>
   <script>
-    //Member and Sub-Member Data
+    //Member and Sub-Member Data - Using all 64 members from buying groups
     const members = [
-      {
-        id: "1",
-        name: "John Doe",
-        subMembers: [
-          { id: "1-1", name: "Jane Doe" },
-          { id: "1-2", name: "Jim Doe" },
-        ],
-      },
-      {
-        id: "2",
-        name: "Alice Smith",
-        subMembers: [
-          { id: "2-1", name: "Bob Smith" },
-          { id: "2-2", name: "Charlie Smith" },
-        ],
-      },
-      {
-        id: "3",
-        name: "Thando Zande",
-        subMembers: [
-          { id: "3-1", name: "Thando Thlal" },
-          { id: "3-2", name: "Thando Moyo" },
-        ],
-      },
-      {
-        id: "4",
-        name: "Thando Moyo",
-        subMembers: [
-          { id: "4-1", name: "Thando Thlal" },
-          { id: "4-2", name: "Thando Zande" },
-        ],
-      },
-      {
-        id: "5",
-        name: "Thando Thlal",
-        subMembers: [
-          { id: "5-1", name: "Thando Moyo" },
-          { id: "5-2", name: "Thando Zande" },
-        ],
-      },
-      {
-        id: "6",
-        name: "Thando Zande",
-        subMembers: [
-          { id: "6-1", name: "Thando Thlal" },
-          { id: "6-2", name: "Thando Moyo" },
-        ],
-      },
-      {
-        id: "7",
-        name: "Thando Moyo",
-        subMembers: [
-          { id: "7-1", name: "Thando Zande" },
-          { id: "7-2", name: "Thando Thlal" },
-        ],
-      },
+      { id: "1", name: "Sibongile Mngomezulu", subMembers: [] },
+      { id: "2", name: "Jacobeth Moqha", subMembers: [] },
+      { id: "3", name: "Sibongile Nxumalo", subMembers: [] },
+      { id: "4", name: "Mmabatho Tlale", subMembers: [] },
+      { id: "5", name: "Nthabiseng Matlala", subMembers: [] },
+      { id: "6", name: "Mpuse Mokota", subMembers: [] },
+      { id: "7", name: "Nthabiseng Mbatha", subMembers: [] },
+      { id: "8", name: "Dorcas Matlala", subMembers: [] },
+      { id: "9", name: "Phumzile Muntsu", subMembers: [] },
+      { id: "10", name: "Mapule Chiloane", subMembers: [] },
+      { id: "11", name: "Winston Nxukumeshe", subMembers: [] },
+      { id: "12", name: "Lizette Chauque", subMembers: [] },
+      { id: "13", name: "Sibongile Buthelezi", subMembers: [] },
+      { id: "14", name: "Kgaugelo Mokele", subMembers: [] },
+      { id: "15", name: "Gladys Rapholo", subMembers: [] },
+      { id: "16", name: "Constance Lebo Tlale", subMembers: [] },
+      { id: "17", name: "Segopotso Mashego", subMembers: [] },
+      { id: "18", name: "Nomvuyo Nkosi", subMembers: [] },
+      { id: "19", name: "Nonkosi Msimanga", subMembers: [] },
+      { id: "20", name: "Nomathemba Mashego", subMembers: [] },
+      { id: "21", name: "Thenjiwe Lebyane", subMembers: [] },
+      { id: "22", name: "Mapule Masuku", subMembers: [] },
+      { id: "23", name: "Thokozile Mdluli", subMembers: [] },
+      { id: "24", name: "Khethiwe Nqai", subMembers: [] },
+      { id: "25", name: "Buhle Mosemola", subMembers: [] },
+      { id: "26", name: "Caroline Sechaba", subMembers: [] },
+      { id: "27", name: "Nomvula Karima", subMembers: [] },
+      { id: "28", name: "Thokozile Morake", subMembers: [] },
+      { id: "29", name: "Maldina Mulhanga", subMembers: [] },
+      { id: "30", name: "Thilivhali Muntsu", subMembers: [] },
+      { id: "31", name: "Remona DAB Molefe", subMembers: [] },
+      { id: "32", name: "Nokuthula Ntombela", subMembers: [] },
+      { id: "33", name: "Linah T. Maluleke", subMembers: [] },
+      { id: "34", name: "Lungile Makhanye", subMembers: [] },
+      { id: "35", name: "Prudence Machele", subMembers: [] },
+      { id: "36", name: "Zandile Sepako", subMembers: [] },
+      { id: "37", name: "Cynthia Rammike", subMembers: [] },
+      { id: "38", name: "Phumzile Maluleke", subMembers: [] },
+      { id: "39", name: "Nonhlanhla Nkosi", subMembers: [] },
+      { id: "40", name: "Mankileng Moagi", subMembers: [] },
+      { id: "41", name: "Palesa Mbele", subMembers: [] },
+      { id: "42", name: "Nomadlozi Mabope", subMembers: [] },
+      { id: "43", name: "Tebogo Nonyane", subMembers: [] },
+      { id: "44", name: "Lebogang Tebele", subMembers: [] },
+      { id: "45", name: "Ntombizotwa Motsemme", subMembers: [] },
+      { id: "46", name: "Ntombifuthi Gloria Mbatha", subMembers: [] },
+      { id: "47", name: "Nthabiseng Nkoane", subMembers: [] },
+      { id: "48", name: "Keneuwe Jea", subMembers: [] },
+      { id: "49", name: "Leshute Lucial Mohlala", subMembers: [] },
+      { id: "50", name: "Magauta Jea", subMembers: [] },
+      { id: "51", name: "Gugu Nkosi", subMembers: [] },
+      { id: "52", name: "Nellie Dlamini", subMembers: [] },
+      { id: "53", name: "Zodwa Beverly Mpanza", subMembers: [] },
+      { id: "54", name: "Alvinah Mosetlo", subMembers: [] },
+      { id: "55", name: "Tebogo Petunia Zulu", subMembers: [] },
+      { id: "56", name: "Dimakatso Ntsoane", subMembers: [] },
+      { id: "57", name: "Fihliwe Simelane", subMembers: [] },
+      { id: "58", name: "Thabo Mthembu", subMembers: [] },
+      { id: "59", name: "Nomsa Khumalo", subMembers: [] },
+      { id: "60", name: "Patricia Mogale", subMembers: [] },
+      { id: "61", name: "Joyce Maleka", subMembers: [] },
+      { id: "62", name: "Samuel Ndaba", subMembers: [] },
+      { id: "63", name: "Rosina Motsoeneng", subMembers: [] },
+      { id: "64", name: "Comfort Phiri", subMembers: [] },
     ];
-    //The following elements are for making the Read Rules button work, these will be used to open a "popup" so the user can read the rules(and maybe accept them).
-    // Get elements
+
+    // Modal functionality
     const modal = document.getElementById("myModal");
     const openBtn = document.getElementById("openModalBtn");
     const closeBtn = document.getElementById("closeModalBtn");
 
-    // Open modal
     openBtn.onclick = function () {
       modal.style.display = "block";
     };
 
-    // Close modal
     closeBtn.onclick = function () {
       modal.style.display = "none";
     };
 
-    // Close modal when clicking outside content
     window.onclick = function (event) {
       if (event.target === modal) {
         modal.style.display = "none";
       }
     };
 
-    //This section below is going to be used to show the which members are buying what.
+    // Buying groups data and functionality
     const memberGroups = [
       {
         group: 1,
@@ -590,6 +668,107 @@
       tr.appendChild(tdAssign);
 
       tbody.appendChild(tr);
+    });
+
+    // Fixed groups and dependents functionality
+    const container = document.getElementById("groupsContainer");
+
+    function createGroup(member, index) {
+      const groupDiv = document.createElement("div");
+      groupDiv.className = "group";
+      groupDiv.dataset.index = index;
+
+      // Display the main member name prominently
+      const header = document.createElement("h3");
+      header.textContent = `Main Member: ${member.name}`;
+      groupDiv.appendChild(header);
+
+      // Spouse Section
+      const spouseDiv = document.createElement("div");
+      spouseDiv.className = "spouse-section";
+
+      const spouseLabel = document.createElement("div");
+      spouseLabel.className = "section-label";
+      spouseLabel.textContent = "Spouse:";
+      spouseDiv.appendChild(spouseLabel);
+
+      const spouseInputDiv = document.createElement("div");
+      spouseInputDiv.className = "input-row";
+
+      const spouseInput = document.createElement("input");
+      spouseInput.type = "text";
+      spouseInput.placeholder = "Enter spouse name";
+      spouseInput.className = "spouse-input";
+
+      spouseInputDiv.appendChild(spouseInput);
+      spouseDiv.appendChild(spouseInputDiv);
+      groupDiv.appendChild(spouseDiv);
+
+      // Dependents Section
+      const dependentsDiv = document.createElement("div");
+      dependentsDiv.className = "dependents";
+
+      const dependentLabel = document.createElement("div");
+      dependentLabel.className = "section-label";
+      dependentLabel.textContent = "Dependents (up to 12):";
+      dependentsDiv.appendChild(dependentLabel);
+
+      // Create 12 pre-made input boxes for dependents
+      for (let i = 1; i <= 12; i++) {
+        const depDiv = document.createElement("div");
+        depDiv.className = "input-row";
+
+        const depLabel = document.createElement("label");
+        depLabel.className = "input-label";
+        depLabel.textContent = `Dependent ${i}:`;
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = `Enter dependent ${i} name`;
+        input.className = "dependent-input";
+
+        depDiv.appendChild(depLabel);
+        depDiv.appendChild(input);
+        dependentsDiv.appendChild(depDiv);
+      }
+
+      const removeGroupBtn = document.createElement("button");
+      removeGroupBtn.textContent = "Remove Entire Group";
+      removeGroupBtn.className = "remove-group-btn";
+      removeGroupBtn.onclick = () => {
+        if (
+          confirm(
+            `Are you sure you want to remove the entire group for ${member.name}?`
+          )
+        ) {
+          groupDiv.remove();
+        }
+      };
+
+      groupDiv.appendChild(dependentsDiv);
+      groupDiv.appendChild(removeGroupBtn);
+
+      return groupDiv;
+    }
+
+    // Create groups for each member
+    members.forEach((member, index) => {
+      const group = createGroup(member, index);
+      container.appendChild(group);
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute("href"));
+        if (target) {
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
     });
   </script>
 </html>
