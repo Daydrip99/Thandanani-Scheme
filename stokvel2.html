@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thandanani Stokvel</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .header {
+      text-align: center;
+      border-bottom: rgba(0, 0, 0, 0.2) solid 1px;
+      padding: 15px;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      background-color: white;
+    }
+    .header a {
+      text-decoration: none;
+      color: black;
+      padding: 6px;
+    }
+    .home-section {
+      padding-top: 95px;
+      background-color: rgb(254, 177, 35);
+    }
+    .home-content {
+      text-align: center;
+      padding: 50px;
+      align-items: center;
+    }
+    .home-title {
+      font-size: 2.5rem;
+      padding-bottom: 20px;
+    }
+    .home-rules {
+      padding-top: 10px;
+      text-align: center;
+      display: flex;
+      border-radius: 7px;
+    }
+    .home-description,
+    .home-rules {
+      border: 2px solid #333;
+      border-radius: 7px;
+      padding: 16px;
+      background: #fff8e1;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .home-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .home-description {
+      border-width: 3px;
+      padding: 20px;
+    }
+    .groups-section {
+      padding: 50px;
+      background-color: rgb(1, 141, 255);
+      color: white;
+    }
+    .groups-content {
+      text-align: center;
+    }
+    .groups-title {
+      font-size: 2.5rem;
+    }
+    .groups-overview {
+      padding: 20px;
+      font-size: 1.2rem;
+    }
+    .constitution {
+      padding: 20px;
+      text-align: center;
+      background-color: #f0f0f0;
+      border-radius: 7px;
+      margin-top: 20px;
+      border: 2px solid black;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    @media (max-width: 768px) {
+      .home-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .rules-button {
+      background-color: #0066ff;
+      cursor: pointer;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 10px;
+      box-shadow: #333 0px 1px 2px;
+    }
+    .rules-button:hover {
+      background-color: #3b89ff;
+    }
+    /* The Modal (background) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Modal Content Box */
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 30px;
+      padding-bottom: 50px;
+      border-radius: 8px;
+      width: 80%;
+      max-height: 80vh;
+      overflow: auto;
+      scroll-behavior: smooth;
+    }
+
+    /* Close Button */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: black;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #f4f4f4;
+    }
+    select {
+      width: 100%;
+    }
+    .buying-groups-title {
+      text-align: center;
+      padding-top: 20px;
+      padding-bottom: 15px;
+      font-size: 2.5rem;
+    }
+    .buying-groups {
+      text-align: center;
+    }
+    .buying-groups-section {
+      color: white;
+      padding: 50px;
+    }
+    .group {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 15px;
+      color: black;
+      text-align: left;
+    }
+    .group h3 {
+      margin: 0 0 15px;
+      color: #333;
+      font-size: 1.3rem;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 8px;
+    }
+    .dependents {
+      margin-top: 15px;
+    }
+    .dependent {
+      display: flex;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .dependent input {
+      flex: 1;
+      margin-right: 10px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .dependent-label {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #555;
+    }
+    button {
+      margin: 2px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .add-btn {
+      background-color: #28a745;
+      color: white;
+    }
+    .add-btn:hover {
+      background-color: #218838;
+    }
+    .remove-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+    .remove-btn:hover {
+      background-color: #c82333;
+    }
+    .remove-group-btn {
+      background-color: #6c757d;
+      color: white;
+    }
+    .remove-group-btn:hover {
+      background-color: #5a6268;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    footer a {
+      color: #fea823;
+    }
+    .input-row {
+      padding: 5px;
+    }
+    .section-label {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #555;
+      font-size: 1.1rem;
+    }
+    .spouse-section {
+      margin-bottom: 20px;
+    }
+    .spouse-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .input-label {
+      display: inline-block;
+      width: 120px;
+      font-weight: bold;
+      color: #555;
+    }
+    .dependent-input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+    .loading {
+      text-align: center;
+      padding: 20px;
+      font-size: 1.2rem;
+    }
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+  </style>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <div
+          class="logo"
+          style="font-size: 30px; font-weight: bold; padding-bottom: 5px"
+        >
+          Thandanani Stokvel
+        </div>
+        <nav class="nav">
+          <a href="#home">Home</a>
+          <a href="#groups">Groups</a>
+          <a href="#buyingGroups">Buying Groups</a>
+          <a href="#contactAdmin">Contact Admin</a>
+        </nav>
+      </div>
+    </header>
+    <!-- Home Section -->
+
+    <section class="home-section" id="home">
+      <div class="home-content">
+        <h1 class="home-title">Welcome to Thandanani Stokvel!</h1>
+        <div class="home-grid">
+          <div class="home-description-and-rules">
+            <p class="home-description">
+              <strong>Mission:</strong> To foster a supportive community that
+              encourages saving and investment. This website is dedicated to the
+              Thandanani Stokvel, a community-driven initiative that brings
+              people together to save, invest, and support each other. Our goal
+              is to empower individuals through collective financial efforts and
+              shared resources.
+            </p>
+          </div>
+          <div class="home-rules">
+            <p>
+              <strong>Rules:</strong> Here you can find the rules, guidelines,
+              and important information about how our stokvel operates. Please
+              read carefully to understand your rights and responsibilities as a
+              member. <br />
+              <button class="rules-button" id="openModalBtn">Read Rules</button>
+            </p>
+            <!--Modal stuff-->
+            <div id="myModal" class="modal">
+              <div class="modal-content">
+                <span id="closeModalBtn" class="close">&times;</span>
+                <u
+                  ><h2 style="padding: 10px; font-weight: bold">
+                    Constitution and Terms of Service.
+                  </h2></u
+                >
+                <p>
+                  1. Committee Members The following members have been selected
+                  to form the Committee: <br />
+                  - Mapule Chiloane <br />- Buhle Mosemola <br />- Maki Rapholo
+                  <br />- The Gentleman (standing invitee) <br /><br />2.
+                  Reporting funerals members must report funerals to Mapule or
+                  other Committee members within 48 hours. For emergency
+                  funerals, members must report within 24 hours. <br /><br />3.
+                  Contributions Members will contribute R55 per burial. An
+                  additional R50 will be contributed whenever a member and/or
+                  spouse is deceased. <br /><br />4. Grocery Contributions
+                  Members must submit their allocated groceries according to the
+                  group list. Only known brands are allowed and no name brands
+                  are not permitted. <br /><br />4.1 Responsibility for Correct
+                  Items Members are responsible for purchasing the correct items
+                  as allocated to their group. Members must check the expiry
+                  dates of all products. Failure to do so will result in a fine.
+                  <br /><br />4.2 Submission Deadline All groceries must be
+                  submitted by 12:00 pm on the communicated date or day. <br />
+                  5. New Member Waiting Period <br /><br />5.1 Those joining in
+                  January must pay a R400 joining fee. <br />5.2 Those who want
+                  to be on standby must have R400 ready in case a slot becomes
+                  available. <br /><br />6. Fines The following fines will be
+                  imposed: - R50 for purchasing incorrect items . The Member
+                  will be given until the deadline to purchase the correct items
+                  falling which fine will be imposed. - R50 for late submission
+                  of groceries after the submission deadline - R50 for any other
+                  breach of the Constitution or rules of the scheme
+                  <br /><br />7. Use of Fine Monies <br /><br />7.1 Fine and
+                  joining fee monies will be used to buy groceries if members
+                  leave the group while there's no replacement. <br /><br />7.2
+                  Committee members will go to the Bank and open a club account
+                  where all monies will be banked and be withdrawn if a need
+                  arises. <br /><br />8. Death Certificate Requirement No
+                  groceries will be issued without a copy of the death
+                  certificate. <br /><br />9. Non-Contributing Members Members
+                  who fail to contribute after 2 funerals will be struck off the
+                  scheme. They must repay any benefits they have received. If
+                  they have not received any benefits, the Committee will issue
+                  a notice of termination with immediate effect. <br /><br />10.
+                  Governing Law This scheme is governed by the laws of the
+                  Republic of South Africa. <br /><br />10.1 Dispute Resolution
+                  Any disputes arising from the interpretation or implementation
+                  of this Constitution shall be resolved through mediation or
+                  other dispute resolution mechanisms as agreed upon by the
+                  parties. <br />11. Terms of Reference: Defaulting Members In
+                  the event of a member defaulting on their contributions or
+                  failing to repay benefits, the following steps will be taken:
+                  <br /><br />11.1 A letter of demand will be sent to the
+                  defaulting member, outlining the amount owed, the reason for
+                  the demand and a deadline for payment (minimum 7 days).
+                  <br /><br />11.2 Follow-up: If the member fails to respond or
+                  make payment within the specified deadline, a follow-up letter
+                  or phone call will be made to remind them of their
+                  obligations. <br /><br />11.3 Mediation: If the member still
+                  fails to respond or make payment, the Committee may attempt to
+                  resolve the matter through mediation. <br /><br />11.4 Legal
+                  Action: If all other efforts fail, the Committee reserves the
+                  right to take legal action against the defaulting member to
+                  recover the outstanding amount. By joining the Thandanani
+                  Groceries Funeral Scheme, members acknowledge that they are
+                  aware of and agree to this Constitution and its Terms of
+                  Reference.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="constitution">
+          <ul style="font-size: 1.1rem; padding-bottom: 5px">
+            <b>Committee members and their contact information:</b>
+          </ul>
+          <li>Mapule Chiloane - 072 398 2229</li>
+          <li>Buhle Masemola - 073 397 1622</li>
+          <li>Maki Rapholo - 082 923 4017</li>
+          <p style="padding-top: 10px">
+            <b style="font-size: 1.1rem">Delivery Address is as follows:</b
+            ><br />
+            7826 Khokhhonoka Street <br />
+            Ext 8<br />
+            Marimba <br />
+            Vosloorus
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Groups Section -->
+    <section class="groups-section" id="groups">
+      <div class="groups-content">
+        <h1 class="groups-title">Groups</h1>
+        <p class="groups-overview">
+          The following are the groups available and the members within them.
+        </p>
+        <div class="group-cards">
+          <h1 style="padding-bottom: 1rem">Individual Members & Dependents</h1>
+          <div id="loadingMessage" class="loading">
+            Loading member groups...
+          </div>
+          <div id="errorMessage" class="error" style="display: none"></div>
+          <div id="groupsContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      style="background-color: rgb(141, 141, 255)"
+      class="buying-groups-section"
+      id="buyingGroups"
+    >
+      <!-- Buying Groups Section -->
+      <div class="buying-groups">
+        <h1 class="buying-groups-title">Grocery Groups</h1>
+        <p>
+          The following are the grocery groups and what they need to buy should
+          a member pass away:
+        </p>
+        <div class="group-hero-card">
+          <u> <h1 style="padding-top: 1rem">Buying Groups Manager</h1></u>
+          <table>
+            <thead>
+              <tr style="color: black">
+                <th>Group</th>
+                <th>Members</th>
+                <th>Assigned Grocery Group</th>
+              </tr>
+            </thead>
+            <tbody id="groupsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contactAdmin">
+      <p>&copy; 2023 Thandanani Stokvel. All rights reserved.</p>
+      <p>
+        Contact us at:
+        <a href="mailto:info@thandanani-stokvel.com"
+          >info@thandanani-stokvel.com</a
+        >
+      </p>
+    </footer>
+  </body>
+  <script
+    type="module"
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"
+  ></script>
+
+  <script>
+        const supabase = supabase.createClient(
+        'https://sjqndwqutoaxybaihcuw.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqcW5kd3F1dG9heHliYWloY3V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTYyNjEsImV4cCI6MjA2OTIzMjI2MX0.nQHxtC8oVXjIfTBwp1pyG8cGkyw0uDEnyLpZSs9tnnI'
+      );
+      // Read initial data
+    const { data, error } = await supabase.from('groups').select('*');
+
+    // Realtime: listen to INSERT, UPDATE, DELETE
+    supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'groups' },
+        (payload) => {
+          console.log('Change received!', payload);
+          // re-render your groups
+        }
+      )
+      .subscribe();
+
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const container = document.getElementById("groupsContainer");
+
+        function renderGroups(data) {
+          container.innerHTML = "";
+          Object.entries(data).forEach(([key, group]) => {
+            const div = document.createElement("div");
+            div.style.border = "1px solid #ccc";
+            div.style.margin = "10px";
+            div.style.padding = "10px";
+
+            const h3 = document.createElement("h3");
+            h3.textContent = `Member: ${group.name}`;
+            div.appendChild(h3);
+
+            const spouse = document.createElement("input");
+            spouse.type = "text";
+            spouse.value = group.spouse || "";
+            spouse.placeholder = "Spouse Name";
+            spouse.onchange = () => {
+              update(ref(db, "groups/" + key), { spouse: spouse.value });
+            };
+            div.appendChild(spouse);
+
+            const depLabel = document.createElement("p");
+            depLabel.textContent = "Dependents:";
+            div.appendChild(depLabel);
+
+            (group.dependents || []).forEach((dep, i) => {
+              const depInput = document.createElement("input");
+              depInput.type = "text";
+              depInput.value = dep;
+              depInput.onchange = () => {
+                group.dependents[i] = depInput.value;
+                update(ref(db, "groups/" + key), { dependents: group.dependents });
+              };
+              div.appendChild(depInput);
+            });
+
+            const addBtn = document.createElement("button");
+            addBtn.textContent = "Add Dependent";
+            addBtn.onclick = () => {
+              const deps = group.dependents || [];
+              deps.push("New Dependent");
+              update(ref(db, "groups/" + key), { dependents: deps });
+            };
+            div.appendChild(addBtn);
+
+            const removeBtn = document.createElement("button");
+            removeBtn.textContent = "Remove Group";
+            removeBtn.onclick = () => {
+              if (confirm("Are you sure?")) remove(ref(db, "groups/" + key));
+            };
+            div.appendChild(removeBtn);
+
+            container.appendChild(div);
+          });
+        }
+
+        // Listen for changes
+        onValue(ref(db, "groups"), (snapshot) => {
+          const data = snapshot.val() || {};
+          renderGroups(data);
+        });
+
+
+        // Member data - Fixed structure
+        const initialMembers = [
+          "Sibongile Mngomezulu",
+          "Jacobeth Moqha",
+          "Sibongile Nxumalo",
+          "Mmabatho Tlale",
+          "Nthabiseng Matlala",
+          "Mpuse Mokota",
+          "Nthabiseng Mbatha",
+          "Dorcas Matlala",
+          "Phumzile Muntsu",
+          "Mapule Chiloane",
+          "Winston Nxukumeshe",
+          "Lizette Chauque",
+          "Sibongile Buthelezi",
+          "Kgaugelo Mokele",
+          "Gladys Rapholo",
+          "Constance Lebo Tlale",
+          "Segopotso Mashego",
+          "Nomvuyo Nkosi",
+          "Nonkosi Msimanga",
+          "Nomathemba Mashego",
+          "Thenjiwe Lebyane",
+          "Mapule Masuku",
+          "Thokozile Mdluli",
+          "Khethiwe Nqai",
+          "Buhle Mosemola",
+          "Caroline Sechaba",
+          "Nomvula Karima",
+          "Thokozile Morake",
+          "Maldina Mulhanga",
+          "Thilivhali Muntsu",
+          "Remona DAB Molefe",
+          "Nokuthula Ntombela",
+          "Linah T. Maluleke",
+          "Lungile Makhanye",
+          "Prudence Machele",
+          "Zandile Sepako",
+          "Cynthia Rammike",
+          "Phumzile Maluleka",
+          "Nonhlanhla Nkosi",
+          "Mankileng Moagi",
+          "Palesa Mbele",
+          "Nomadlozi Mabope",
+          "Tebogo Nonyane",
+          "Lebogang Tebele",
+          "Ntombizotwa Motsemme",
+          "Ntombifuthi Gloria Mbatha",
+          "Nthabiseng Nkoane",
+          "Keneuwe Jea",
+          "Leshute Lucial Mohlala",
+          "Magauta Jea",
+          "Gugu Nkosi",
+          "Nellie Dlamini",
+          "Zodwa Beverly Mpanza",
+          "Alvinah Mosetlo",
+          "Tebogo Petunia Zulu",
+          "Dimakatso Ntsoane",
+          "Fihliwe Simelane",
+          "Thabo Mthembu",
+          "Nomsa Khumalo",
+          "Patricia Mogale",
+          "Joyce Maleka",
+          "Samuel Ndaba",
+          "Rosina Motsoeneng",
+          "Comfort Phiri",
+        ];
+
+        // Initialize in-memory data structure
+        function initializeData() {
+          // Fix: Dependents should be an array of objects, not strings
+          initialMembers.forEach((name, index) => {
+            membersData[index] = {
+              name: name,
+              spouse: "",
+              dependents: Array(12).fill({ name: "" }), // Each dependent is an object
+            };
+          });
+        }
+
+        // Modal functionality
+        const modal = document.getElementById("myModal");
+        const openBtn = document.getElementById("openModalBtn");
+        const closeBtn = document.getElementById("closeModalBtn");
+
+        openBtn.onclick = function () {
+          modal.style.display = "block";
+        };
+
+        closeBtn.onclick = function () {
+          modal.style.display = "none";
+        };
+
+        window.onclick = function (event) {
+          if (event.target === modal) {
+            modal.style.display = "none";
+          }
+        };
+
+        // Buying groups data and functionality
+        const memberGroups = [
+          {
+            group: 1,
+            members: [
+              "Sibongile Mngomezulu",
+              "Jacobeth Moqha",
+              "Sibongile Nxumalo",
+            ],
+          },
+          {
+            group: 2,
+            members: ["Mmabatho Tlale", "Nthabiseng Matlala", "Mpuse Mokota"],
+          },
+          {
+            group: 3,
+            members: ["Nthabiseng Mbatha", "Dorcas Matlala", "Phumzile Muntsu"],
+          },
+          {
+            group: 4,
+            members: ["Mapule Chiloane", "Winston Nxukumeshe", "Lizette Chauque"],
+          },
+          {
+            group: 5,
+            members: ["Sibongile Buthelezi", "Kgaugelo Mokele", "Gladys Rapholo"],
+          },
+          {
+            group: 6,
+            members: ["Constance Lebo Tlale", "Segopotso Mashego", "Nomvuyo Nkosi"],
+          },
+          {
+            group: 7,
+            members: ["Nonkosi Msimanga", "Nomathemba Mashego", "Thenjiwe Lebyane"],
+          },
+          {
+            group: 8,
+            members: ["Mapule Masuku", "Thokozile Mdluli", "Khethiwe Nqai"],
+          },
+          {
+            group: 9,
+            members: ["Buhle Mosemola", "Caroline Sechaba", "Nomvula Karima"],
+          },
+          {
+            group: 10,
+            members: ["Thokozile Morake", "Maldina Mulhanga", "Thilivhali Muntsu"],
+          },
+          {
+            group: 11,
+            members: [
+              "Remona DAB Molefe",
+              "Nokuthula Ntombela",
+              "Linah T. Maluleke",
+            ],
+          },
+          {
+            group: 12,
+            members: ["Lungile Makhanye", "Prudence Machele", "Zandile Sepako"],
+          },
+          {
+            group: 13,
+            members: ["Cynthia Rammike", "Phumzile Maluleke", "Nonhlanhla Nkosi"],
+          },
+          {
+            group: 14,
+            members: ["Mankileng Moagi", "Palesa Mbele", "Nomadlozi Mabope"],
+          },
+          {
+            group: 15,
+            members: ["Tebogo Nonyane", "Lebogang Tebele", "Ntombizotwa Motsemme"],
+          },
+          {
+            group: 16,
+            members: ["Ntombifuthi Gloria Mbatha", "Nthabiseng Nkoane"],
+          },
+          { group: 17, members: ["Keneuwe Jea", "Leshute Lucial Mohlala"] },
+          { group: 18, members: ["Magauta Jea", "Gugu Nkosi"] },
+          { group: 19, members: ["Nellie Dlamini", "Zodwa Beverly Mpanza"] },
+          { group: 20, members: ["Alvinah Mosetlo", "Tebogo Petunia Zulu"] },
+          { group: 21, members: ["Dimakatso Ntsoane", "Fihliwe Simelane"] },
+        ];
+
+        const groceryGroups = [
+          "10Kg Cake Flour, 100ml Vanilla Essence + R55",
+          "75 Fomo Trays, Pack Plastic Spoons + R55",
+          "12.5kg White Star Maize Meal, 200g Baking Powder + R55",
+          "5L Cooking Oil + R55",
+          "5kg Brown Sugar, 5kg White Sugar + R55",
+          "3kg Mayonnaise + R55",
+          "10Kg Samp + R55",
+          "10Kg Rice + R55",
+          "5L Summerland Juice + R55",
+          "250g Five Roses Tea, 200g Rooibos, 750g Ricoffy + R55",
+          "6 pack Longlife Milk, Cremora/Ellis Brown Box + R55",
+          "7 x 500g Rama + R55",
+          "5kg Drumsticks/Thighs + R55",
+          "24 Knorrox Cubes, 10 Soup Packets, 200g Rajah, 200g Six Gun/Hinds, 2 x 200g Top Class + R55",
+          "3 Dishcloths, 1.5L Sunlight Liquid, 3 Pot Scrapers, 200g Steel Wool + R55",
+          "24 tray 330ml Coke + R55",
+          "1.1kg Mrs Balls Chutney, 700ml Sweet Chilli, 700ml Tomato Sauce + R55",
+          "500ml Sta Soft, 8 Pack Twinsaver Toilet Rolls, White Vinegar 2L + R55",
+          "2kg Omo or Surf Washing Powder, 1kg Salt, 1 Pack Candles + R55",
+          "2x 500g Sunlight Green Bar, 1 Pack Matches, 750ml Handy Andy, 2x 750ml Domestos + R55",
+          "60 Eggs, 1 Pack Refuse Bags + R55",
+        ];
+
+        // Initialize buying groups table
+        function initializeBuyingGroupsTable() {
+          const tbody = document.getElementById("groupsTableBody");
+          tbody.innerHTML = "";
+
+          memberGroups.forEach((group) => {
+            const tr = document.createElement("tr");
+
+            // Group number
+            const tdGroup = document.createElement("td");
+            tdGroup.textContent = `Group ${group.group}`;
+            tr.appendChild(tdGroup);
+
+            // Members
+            const tdMembers = document.createElement("td");
+            tdMembers.textContent = group.members.join(", ");
+            tr.appendChild(tdMembers);
+
+            // Grocery Group dropdown
+            const tdAssign = document.createElement("td");
+            const select = document.createElement("select");
+
+            groceryGroups.forEach((grocery, idx) => {
+              const option = document.createElement("option");
+              option.value = idx + 1;
+              option.textContent = `Group ${idx + 1} - ${grocery}`;
+              // Default: same number as group
+              if (idx + 1 === group.group) {
+                option.selected = true;
+              }
+              select.appendChild(option);
+            });
+
+            tdAssign.appendChild(select);
+            tr.appendChild(tdAssign);
+
+            tbody.appendChild(tr);
+          });
+        }
+
+        // Create a group UI element
+        function createGroupElement(key, memberData) {
+          const groupDiv = document.createElement("div");
+          groupDiv.className = "group";
+          groupDiv.dataset.key = key;
+
+          // Main member header
+          const header = document.createElement("h3");
+          header.textContent = `Main Member: ${memberData.name}`;
+          groupDiv.appendChild(header);
+
+          // Spouse Section
+          const spouseDiv = document.createElement("div");
+          spouseDiv.className = "spouse-section";
+
+          const spouseLabel = document.createElement("div");
+          spouseLabel.className = "section-label";
+          spouseLabel.textContent = "Spouse:";
+          spouseDiv.appendChild(spouseLabel);
+
+          const spouseInputDiv = document.createElement("div");
+          spouseInputDiv.className = "input-row";
+
+          const spouseInput = document.createElement("input");
+          spouseInput.type = "text";
+          spouseInput.placeholder = "Enter spouse name";
+          spouseInput.className = "spouse-input";
+          spouseInput.value = memberData.spouse || "";
+
+          spouseInput.addEventListener("change", () => {
+            updateMemberData(key, "spouse", spouseInput.value);
+          });
+
+          spouseInputDiv.appendChild(spouseInput);
+          spouseDiv.appendChild(spouseInputDiv);
+          groupDiv.appendChild(spouseDiv);
+
+          // Dependents Section
+          const dependentsDiv = document.createElement("div");
+          dependentsDiv.className = "dependents";
+
+          const dependentLabel = document.createElement("div");
+          dependentLabel.className = "section-label";
+          dependentLabel.textContent = "Dependents:";
+          dependentsDiv.appendChild(dependentLabel);
+
+          // Add existing dependents
+          memberData.dependents.forEach((dependent, index) => {
+            const dependentDiv = document.createElement("div");
+            dependentDiv.className = "dependent";
+
+            const dependentInput = document.createElement("input");
+            dependentInput.type = "text";
+            dependentInput.placeholder = "Enter dependent name";
+            dependentInput.value = dependent.name || "";
+
+            dependentInput.addEventListener("change", () => {
+              updateMemberData(
+                key,
+                "dependents",
+                index,
+                "name",
+                dependentInput.value
+              );
+            });
+
+            dependentDiv.appendChild(dependentInput);
+            dependentsDiv.appendChild(dependentDiv);
+          });
+
+          groupDiv.appendChild(dependentsDiv);
+
+          return groupDiv;
+        }
+
+        // Fix: updateMemberData function for in-memory mode
+        function updateMemberData(key, field, ...args) {
+          if (!isFirebaseEnabled) {
+            if (field === "spouse") {
+              membersData[key].spouse = args[0];
+            } else if (field === "dependents") {
+              const depIndex = args[0];
+              const depField = args[1];
+              const depValue = args[2];
+              if (!membersData[key].dependents[depIndex]) {
+                membersData[key].dependents[depIndex] = { name: "" };
+              }
+              membersData[key].dependents[depIndex][depField] = depValue;
+            }
+            renderAllGroups();
+          }
+          // Add Firebase update logic here if needed
+        }
+
+        // Fix: Render all groups
+        function renderAllGroups() {
+          const container = document.getElementById("groupsContainer");
+          container.innerHTML = "";
+          Object.entries(membersData).forEach(([key, memberData]) => {
+            container.appendChild(createGroupElement(key, memberData));
+          });
+          // Hide loading message
+          document.getElementById("loadingMessage").style.display = "none";
+        }
+
+        // Fix: Dependents input rendering (ensure always 12 inputs)
+        function createGroupElement(key, memberData) {
+          const groupDiv = document.createElement("div");
+          groupDiv.className = "group";
+          groupDiv.dataset.key = key;
+
+          // Main member header
+          const header = document.createElement("h3");
+          header.textContent = `Main Member: ${memberData.name}`;
+          groupDiv.appendChild(header);
+
+          // Spouse Section
+          const spouseDiv = document.createElement("div");
+          spouseDiv.className = "spouse-section";
+
+          const spouseLabel = document.createElement("div");
+          spouseLabel.className = "section-label";
+          spouseLabel.textContent = "Spouse:";
+          spouseDiv.appendChild(spouseLabel);
+
+          const spouseInputDiv = document.createElement("div");
+          spouseInputDiv.className = "input-row";
+
+          const spouseInput = document.createElement("input");
+          spouseInput.type = "text";
+          spouseInput.placeholder = "Enter spouse name";
+          spouseInput.className = "spouse-input";
+          spouseInput.value = memberData.spouse || "";
+
+          spouseInput.addEventListener("change", () => {
+            updateMemberData(key, "spouse", spouseInput.value);
+          });
+
+          spouseInputDiv.appendChild(spouseInput);
+          spouseDiv.appendChild(spouseInputDiv);
+          groupDiv.appendChild(spouseDiv);
+
+          // Dependents Section
+          const dependentsDiv = document.createElement("div");
+          dependentsDiv.className = "dependents";
+
+          const dependentLabel = document.createElement("div");
+          dependentLabel.className = "section-label";
+          dependentLabel.textContent = "Dependents:";
+          dependentsDiv.appendChild(dependentLabel);
+
+          // Always render 12 dependents
+          for (let i = 0; i < 12; i++) {
+            const dependentDiv = document.createElement("div");
+            dependentDiv.className = "dependent";
+
+            const dependentInput = document.createElement("input");
+            dependentInput.type = "text";
+            dependentInput.placeholder = "Enter dependent name";
+            dependentInput.value =
+              (memberData.dependents[i] && memberData.dependents[i].name) || "";
+
+            dependentInput.addEventListener("change", () => {
+              updateMemberData(key, "dependents", i, "name", dependentInput.value);
+            });
+
+            dependentDiv.appendChild(dependentInput);
+            dependentsDiv.appendChild(dependentDiv);
+          }
+
+          groupDiv.appendChild(dependentsDiv);
+
+          return groupDiv;
+        }
+
+        // Initialize and render on page load
+        initializeData();
+        renderAllGroups();
+        initializeBuyingGroupsTable();
+  </script>
+</html>
