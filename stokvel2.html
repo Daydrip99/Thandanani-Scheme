@@ -442,6 +442,7 @@
             Loading member groups...
           </div>
           <div id="errorMessage" class="error" style="display: none"></div>
+          <button id="addGroupBtn" class="add-btn">Add Group</button>
           <div id="groupsContainer"></div>
         </div>
       </div>
@@ -485,523 +486,464 @@
       </p>
     </footer>
   </body>
-  <script
-    type="module"
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"
-  ></script>
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      onValue,
+      set,
+      push,
+      update,
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
-  <script>
-        const supabase = supabase.createClient(
-        'https://sjqndwqutoaxybaihcuw.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqcW5kd3F1dG9heHliYWloY3V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTYyNjEsImV4cCI6MjA2OTIzMjI2MX0.nQHxtC8oVXjIfTBwp1pyG8cGkyw0uDEnyLpZSs9tnnI'
-      );
-      // Read initial data
-    const { data, error } = await supabase.from('groups').select('*');
+    // Your Firebase config here:
+    const firebaseConfig = {
+      apiKey: "AIzaSyACnXUhOYpflA3DSfNY193y0h8RsuSGzyw",
+      authDomain: "thandanani-funeral-scheme.firebaseapp.com",
+      databaseURL:
+        "https://thandanani-funeral-scheme-default-rtdb.firebaseio.com",
+      projectId: "thandanani-funeral-scheme",
+      storageBucket: "thandanani-funeral-scheme.firebasestorage.app",
+      messagingSenderId: "672866057366",
+      appId: "1:672866057366:web:fbf2bee5028cefb00296b7",
+      measurementId: "G-ZFYLVW7G7S",
+    };
 
-    // Realtime: listen to INSERT, UPDATE, DELETE
-    supabase
-      .channel('custom-all-channel')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'groups' },
-        (payload) => {
-          console.log('Change received!', payload);
-          // re-render your groups
-        }
-      )
-      .subscribe();
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
+    // Member data - Fixed structure
+    const initialMembers = [
+      "Sibongile Mngomezulu",
+      "Jacobeth Moqha",
+      "Sibongile Nxumalo",
+      "Mmabatho Tlale",
+      "Nthabiseng Matlala",
+      "Mpuse Mokota",
+      "Nthabiseng Mbatha",
+      "Dorcas Matlala",
+      "Phumzile Muntsu",
+      "Mapule Chiloane",
+      "Winston Nxukumeshe",
+      "Lizette Chauque",
+      "Sibongile Buthelezi",
+      "Kgaugelo Mokele",
+      "Gladys Rapholo",
+      "Constance Lebo Tlale",
+      "Segopotso Mashego",
+      "Nomvuyo Nkosi",
+      "Nonkosi Msimanga",
+      "Nomathemba Mashego",
+      "Thenjiwe Lebyane",
+      "Mapule Masuku",
+      "Thokozile Mdluli",
+      "Khethiwe Nqai",
+      "Buhle Mosemola",
+      "Caroline Sechaba",
+      "Nomvula Karima",
+      "Thokozile Morake",
+      "Maldina Mulhanga",
+      "Thilivhali Muntsu",
+      "Remona DAB Molefe",
+      "Nokuthula Ntombela",
+      "Linah T. Maluleke",
+      "Lungile Makhanye",
+      "Prudence Machele",
+      "Zandile Sepako",
+      "Cynthia Rammike",
+      "Phumzile Maluleka",
+      "Nonhlanhla Nkosi",
+      "Mankileng Moagi",
+      "Palesa Mbele",
+      "Nomadlozi Mabope",
+      "Tebogo Nonyane",
+      "Lebogang Tebele",
+      "Ntombizotwa Motsemme",
+      "Ntombifuthi Gloria Mbatha",
+      "Nthabiseng Nkoane",
+      "Keneuwe Jea",
+      "Leshute Lucial Mohlala",
+      "Magauta Jea",
+      "Gugu Nkosi",
+      "Nellie Dlamini",
+      "Zodwa Beverly Mpanza",
+      "Alvinah Mosetlo",
+      "Tebogo Petunia Zulu",
+      "Dimakatso Ntsoane",
+      "Fihliwe Simelane",
+      "Thabo Mthembu",
+      "Nomsa Khumalo",
+      "Patricia Mogale",
+      "Joyce Maleka",
+      "Samuel Ndaba",
+      "Rosina Motsoeneng",
+      "Comfort Phiri",
+    ];
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+    // Initialize in-memory data structure
+    function initializeData() {
+      // Fix: Dependents should be an array of objects, not strings
+      initialMembers.forEach((name, index) => {
+        membersData[index] = {
+          name: name,
+          spouse: "",
+          dependents: Array(12).fill({ name: "" }), // Each dependent is an object
+        };
+      });
+    }
 
-        const container = document.getElementById("groupsContainer");
+    // Modal functionality
+    const modal = document.getElementById("myModal");
+    const openBtn = document.getElementById("openModalBtn");
+    const closeBtn = document.getElementById("closeModalBtn");
 
-        function renderGroups(data) {
-          container.innerHTML = "";
-          Object.entries(data).forEach(([key, group]) => {
-            const div = document.createElement("div");
-            div.style.border = "1px solid #ccc";
-            div.style.margin = "10px";
-            div.style.padding = "10px";
+    openBtn.onclick = function () {
+      modal.style.display = "block";
+    };
 
-            const h3 = document.createElement("h3");
-            h3.textContent = `Member: ${group.name}`;
-            div.appendChild(h3);
+    closeBtn.onclick = function () {
+      modal.style.display = "none";
+    };
 
-            const spouse = document.createElement("input");
-            spouse.type = "text";
-            spouse.value = group.spouse || "";
-            spouse.placeholder = "Spouse Name";
-            spouse.onchange = () => {
-              update(ref(db, "groups/" + key), { spouse: spouse.value });
-            };
-            div.appendChild(spouse);
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
 
-            const depLabel = document.createElement("p");
-            depLabel.textContent = "Dependents:";
-            div.appendChild(depLabel);
+    document.getElementById("addGroupBtn").onclick = function () {
+      const groupName = prompt("Enter main member name:");
+      if (groupName) {
+        const newMember = {
+          name: groupName,
+          spouse: "",
+          dependents: Array(12).fill({ name: "" }),
+        };
+        const newMemberRef = push(ref(db, "members"));
+        update(newMemberRef, newMember);
+      }
+    };
 
-            (group.dependents || []).forEach((dep, i) => {
-              const depInput = document.createElement("input");
-              depInput.type = "text";
-              depInput.value = dep;
-              depInput.onchange = () => {
-                group.dependents[i] = depInput.value;
-                update(ref(db, "groups/" + key), { dependents: group.dependents });
-              };
-              div.appendChild(depInput);
-            });
-
-            const addBtn = document.createElement("button");
-            addBtn.textContent = "Add Dependent";
-            addBtn.onclick = () => {
-              const deps = group.dependents || [];
-              deps.push("New Dependent");
-              update(ref(db, "groups/" + key), { dependents: deps });
-            };
-            div.appendChild(addBtn);
-
-            const removeBtn = document.createElement("button");
-            removeBtn.textContent = "Remove Group";
-            removeBtn.onclick = () => {
-              if (confirm("Are you sure?")) remove(ref(db, "groups/" + key));
-            };
-            div.appendChild(removeBtn);
-
-            container.appendChild(div);
-          });
-        }
-
-        // Listen for changes
-        onValue(ref(db, "groups"), (snapshot) => {
-          const data = snapshot.val() || {};
-          renderGroups(data);
-        });
-
-
-        // Member data - Fixed structure
-        const initialMembers = [
+    // Buying groups data and functionality
+    const memberGroups = [
+      {
+        group: 1,
+        members: [
           "Sibongile Mngomezulu",
           "Jacobeth Moqha",
           "Sibongile Nxumalo",
-          "Mmabatho Tlale",
-          "Nthabiseng Matlala",
-          "Mpuse Mokota",
-          "Nthabiseng Mbatha",
-          "Dorcas Matlala",
-          "Phumzile Muntsu",
-          "Mapule Chiloane",
-          "Winston Nxukumeshe",
-          "Lizette Chauque",
-          "Sibongile Buthelezi",
-          "Kgaugelo Mokele",
-          "Gladys Rapholo",
-          "Constance Lebo Tlale",
-          "Segopotso Mashego",
-          "Nomvuyo Nkosi",
-          "Nonkosi Msimanga",
-          "Nomathemba Mashego",
-          "Thenjiwe Lebyane",
-          "Mapule Masuku",
-          "Thokozile Mdluli",
-          "Khethiwe Nqai",
-          "Buhle Mosemola",
-          "Caroline Sechaba",
-          "Nomvula Karima",
-          "Thokozile Morake",
-          "Maldina Mulhanga",
-          "Thilivhali Muntsu",
+        ],
+      },
+      {
+        group: 2,
+        members: ["Mmabatho Tlale", "Nthabiseng Matlala", "Mpuse Mokota"],
+      },
+      {
+        group: 3,
+        members: ["Nthabiseng Mbatha", "Dorcas Matlala", "Phumzile Muntsu"],
+      },
+      {
+        group: 4,
+        members: ["Mapule Chiloane", "Winston Nxukumeshe", "Lizette Chauque"],
+      },
+      {
+        group: 5,
+        members: ["Sibongile Buthelezi", "Kgaugelo Mokele", "Gladys Rapholo"],
+      },
+      {
+        group: 6,
+        members: ["Constance Lebo Tlale", "Segopotso Mashego", "Nomvuyo Nkosi"],
+      },
+      {
+        group: 7,
+        members: ["Nonkosi Msimanga", "Nomathemba Mashego", "Thenjiwe Lebyane"],
+      },
+      {
+        group: 8,
+        members: ["Mapule Masuku", "Thokozile Mdluli", "Khethiwe Nqai"],
+      },
+      {
+        group: 9,
+        members: ["Buhle Mosemola", "Caroline Sechaba", "Nomvula Karima"],
+      },
+      {
+        group: 10,
+        members: ["Thokozile Morake", "Maldina Mulhanga", "Thilivhali Muntsu"],
+      },
+      {
+        group: 11,
+        members: [
           "Remona DAB Molefe",
           "Nokuthula Ntombela",
           "Linah T. Maluleke",
-          "Lungile Makhanye",
-          "Prudence Machele",
-          "Zandile Sepako",
-          "Cynthia Rammike",
-          "Phumzile Maluleka",
-          "Nonhlanhla Nkosi",
-          "Mankileng Moagi",
-          "Palesa Mbele",
-          "Nomadlozi Mabope",
-          "Tebogo Nonyane",
-          "Lebogang Tebele",
-          "Ntombizotwa Motsemme",
-          "Ntombifuthi Gloria Mbatha",
-          "Nthabiseng Nkoane",
-          "Keneuwe Jea",
-          "Leshute Lucial Mohlala",
-          "Magauta Jea",
-          "Gugu Nkosi",
-          "Nellie Dlamini",
-          "Zodwa Beverly Mpanza",
-          "Alvinah Mosetlo",
-          "Tebogo Petunia Zulu",
-          "Dimakatso Ntsoane",
-          "Fihliwe Simelane",
-          "Thabo Mthembu",
-          "Nomsa Khumalo",
-          "Patricia Mogale",
-          "Joyce Maleka",
-          "Samuel Ndaba",
-          "Rosina Motsoeneng",
-          "Comfort Phiri",
-        ];
+        ],
+      },
+      {
+        group: 12,
+        members: ["Lungile Makhanye", "Prudence Machele", "Zandile Sepako"],
+      },
+      {
+        group: 13,
+        members: ["Cynthia Rammike", "Phumzile Maluleke", "Nonhlanhla Nkosi"],
+      },
+      {
+        group: 14,
+        members: ["Mankileng Moagi", "Palesa Mbele", "Nomadlozi Mabope"],
+      },
+      {
+        group: 15,
+        members: ["Tebogo Nonyane", "Lebogang Tebele", "Ntombizotwa Motsemme"],
+      },
+      {
+        group: 16,
+        members: ["Ntombifuthi Gloria Mbatha", "Nthabiseng Nkoane"],
+      },
+      { group: 17, members: ["Keneuwe Jea", "Leshute Lucial Mohlala"] },
+      { group: 18, members: ["Magauta Jea", "Gugu Nkosi"] },
+      { group: 19, members: ["Nellie Dlamini", "Zodwa Beverly Mpanza"] },
+      { group: 20, members: ["Alvinah Mosetlo", "Tebogo Petunia Zulu"] },
+      { group: 21, members: ["Dimakatso Ntsoane", "Fihliwe Simelane"] },
+    ];
 
-        // Initialize in-memory data structure
-        function initializeData() {
-          // Fix: Dependents should be an array of objects, not strings
-          initialMembers.forEach((name, index) => {
-            membersData[index] = {
-              name: name,
-              spouse: "",
-              dependents: Array(12).fill({ name: "" }), // Each dependent is an object
-            };
-          });
-        }
+    const groceryGroups = [
+      "10Kg Cake Flour, 100ml Vanilla Essence + R55",
+      "75 Fomo Trays, Pack Plastic Spoons + R55",
+      "12.5kg White Star Maize Meal, 200g Baking Powder + R55",
+      "5L Cooking Oil + R55",
+      "5kg Brown Sugar, 5kg White Sugar + R55",
+      "3kg Mayonnaise + R55",
+      "10Kg Samp + R55",
+      "10Kg Rice + R55",
+      "5L Summerland Juice + R55",
+      "250g Five Roses Tea, 200g Rooibos, 750g Ricoffy + R55",
+      "6 pack Longlife Milk, Cremora/Ellis Brown Box + R55",
+      "7 x 500g Rama + R55",
+      "5kg Drumsticks/Thighs + R55",
+      "24 Knorrox Cubes, 10 Soup Packets, 200g Rajah, 200g Six Gun/Hinds, 2 x 200g Top Class + R55",
+      "3 Dishcloths, 1.5L Sunlight Liquid, 3 Pot Scrapers, 200g Steel Wool + R55",
+      "24 tray 330ml Coke + R55",
+      "1.1kg Mrs Balls Chutney, 700ml Sweet Chilli, 700ml Tomato Sauce + R55",
+      "500ml Sta Soft, 8 Pack Twinsaver Toilet Rolls, White Vinegar 2L + R55",
+      "2kg Omo or Surf Washing Powder, 1kg Salt, 1 Pack Candles + R55",
+      "2x 500g Sunlight Green Bar, 1 Pack Matches, 750ml Handy Andy, 2x 750ml Domestos + R55",
+      "60 Eggs, 1 Pack Refuse Bags + R55",
+    ];
 
-        // Modal functionality
-        const modal = document.getElementById("myModal");
-        const openBtn = document.getElementById("openModalBtn");
-        const closeBtn = document.getElementById("closeModalBtn");
+    // Initialize buying groups table
+    function initializeBuyingGroupsTable() {
+      const tbody = document.getElementById("groupsTableBody");
+      tbody.innerHTML = "";
 
-        openBtn.onclick = function () {
-          modal.style.display = "block";
-        };
+      memberGroups.forEach((group) => {
+        const tr = document.createElement("tr");
 
-        closeBtn.onclick = function () {
-          modal.style.display = "none";
-        };
+        // Group number
+        const tdGroup = document.createElement("td");
+        tdGroup.textContent = `Group ${group.group}`;
+        tr.appendChild(tdGroup);
 
-        window.onclick = function (event) {
-          if (event.target === modal) {
-            modal.style.display = "none";
+        // Members
+        const tdMembers = document.createElement("td");
+        tdMembers.textContent = group.members.join(", ");
+        tr.appendChild(tdMembers);
+
+        // Grocery Group dropdown
+        const tdAssign = document.createElement("td");
+        const select = document.createElement("select");
+
+        groceryGroups.forEach((grocery, idx) => {
+          const option = document.createElement("option");
+          option.value = idx + 1;
+          option.textContent = `Group ${idx + 1} - ${grocery}`;
+          // Default: same number as group
+          if (idx + 1 === group.group) {
+            option.selected = true;
           }
-        };
+          select.appendChild(option);
+        });
 
-        // Buying groups data and functionality
-        const memberGroups = [
-          {
-            group: 1,
-            members: [
-              "Sibongile Mngomezulu",
-              "Jacobeth Moqha",
-              "Sibongile Nxumalo",
-            ],
-          },
-          {
-            group: 2,
-            members: ["Mmabatho Tlale", "Nthabiseng Matlala", "Mpuse Mokota"],
-          },
-          {
-            group: 3,
-            members: ["Nthabiseng Mbatha", "Dorcas Matlala", "Phumzile Muntsu"],
-          },
-          {
-            group: 4,
-            members: ["Mapule Chiloane", "Winston Nxukumeshe", "Lizette Chauque"],
-          },
-          {
-            group: 5,
-            members: ["Sibongile Buthelezi", "Kgaugelo Mokele", "Gladys Rapholo"],
-          },
-          {
-            group: 6,
-            members: ["Constance Lebo Tlale", "Segopotso Mashego", "Nomvuyo Nkosi"],
-          },
-          {
-            group: 7,
-            members: ["Nonkosi Msimanga", "Nomathemba Mashego", "Thenjiwe Lebyane"],
-          },
-          {
-            group: 8,
-            members: ["Mapule Masuku", "Thokozile Mdluli", "Khethiwe Nqai"],
-          },
-          {
-            group: 9,
-            members: ["Buhle Mosemola", "Caroline Sechaba", "Nomvula Karima"],
-          },
-          {
-            group: 10,
-            members: ["Thokozile Morake", "Maldina Mulhanga", "Thilivhali Muntsu"],
-          },
-          {
-            group: 11,
-            members: [
-              "Remona DAB Molefe",
-              "Nokuthula Ntombela",
-              "Linah T. Maluleke",
-            ],
-          },
-          {
-            group: 12,
-            members: ["Lungile Makhanye", "Prudence Machele", "Zandile Sepako"],
-          },
-          {
-            group: 13,
-            members: ["Cynthia Rammike", "Phumzile Maluleke", "Nonhlanhla Nkosi"],
-          },
-          {
-            group: 14,
-            members: ["Mankileng Moagi", "Palesa Mbele", "Nomadlozi Mabope"],
-          },
-          {
-            group: 15,
-            members: ["Tebogo Nonyane", "Lebogang Tebele", "Ntombizotwa Motsemme"],
-          },
-          {
-            group: 16,
-            members: ["Ntombifuthi Gloria Mbatha", "Nthabiseng Nkoane"],
-          },
-          { group: 17, members: ["Keneuwe Jea", "Leshute Lucial Mohlala"] },
-          { group: 18, members: ["Magauta Jea", "Gugu Nkosi"] },
-          { group: 19, members: ["Nellie Dlamini", "Zodwa Beverly Mpanza"] },
-          { group: 20, members: ["Alvinah Mosetlo", "Tebogo Petunia Zulu"] },
-          { group: 21, members: ["Dimakatso Ntsoane", "Fihliwe Simelane"] },
-        ];
+        tdAssign.appendChild(select);
+        tr.appendChild(tdAssign);
 
-        const groceryGroups = [
-          "10Kg Cake Flour, 100ml Vanilla Essence + R55",
-          "75 Fomo Trays, Pack Plastic Spoons + R55",
-          "12.5kg White Star Maize Meal, 200g Baking Powder + R55",
-          "5L Cooking Oil + R55",
-          "5kg Brown Sugar, 5kg White Sugar + R55",
-          "3kg Mayonnaise + R55",
-          "10Kg Samp + R55",
-          "10Kg Rice + R55",
-          "5L Summerland Juice + R55",
-          "250g Five Roses Tea, 200g Rooibos, 750g Ricoffy + R55",
-          "6 pack Longlife Milk, Cremora/Ellis Brown Box + R55",
-          "7 x 500g Rama + R55",
-          "5kg Drumsticks/Thighs + R55",
-          "24 Knorrox Cubes, 10 Soup Packets, 200g Rajah, 200g Six Gun/Hinds, 2 x 200g Top Class + R55",
-          "3 Dishcloths, 1.5L Sunlight Liquid, 3 Pot Scrapers, 200g Steel Wool + R55",
-          "24 tray 330ml Coke + R55",
-          "1.1kg Mrs Balls Chutney, 700ml Sweet Chilli, 700ml Tomato Sauce + R55",
-          "500ml Sta Soft, 8 Pack Twinsaver Toilet Rolls, White Vinegar 2L + R55",
-          "2kg Omo or Surf Washing Powder, 1kg Salt, 1 Pack Candles + R55",
-          "2x 500g Sunlight Green Bar, 1 Pack Matches, 750ml Handy Andy, 2x 750ml Domestos + R55",
-          "60 Eggs, 1 Pack Refuse Bags + R55",
-        ];
+        tbody.appendChild(tr);
+      });
+    }
 
-        // Initialize buying groups table
-        function initializeBuyingGroupsTable() {
-          const tbody = document.getElementById("groupsTableBody");
-          tbody.innerHTML = "";
+    // Create a group UI element
+    function createGroupElement(key, memberData) {
+      const groupDiv = document.createElement("div");
+      groupDiv.className = "group";
+      groupDiv.dataset.key = key;
 
-          memberGroups.forEach((group) => {
-            const tr = document.createElement("tr");
+      // Main member header
+      const header = document.createElement("h3");
+      header.textContent = `Main Member: ${memberData.name}`;
+      groupDiv.appendChild(header);
 
-            // Group number
-            const tdGroup = document.createElement("td");
-            tdGroup.textContent = `Group ${group.group}`;
-            tr.appendChild(tdGroup);
+      // Spouse Section
+      const spouseDiv = document.createElement("div");
+      spouseDiv.className = "spouse-section";
 
-            // Members
-            const tdMembers = document.createElement("td");
-            tdMembers.textContent = group.members.join(", ");
-            tr.appendChild(tdMembers);
+      const spouseLabel = document.createElement("div");
+      spouseLabel.className = "section-label";
+      spouseLabel.textContent = "Spouse:";
+      spouseDiv.appendChild(spouseLabel);
 
-            // Grocery Group dropdown
-            const tdAssign = document.createElement("td");
-            const select = document.createElement("select");
+      const spouseInputDiv = document.createElement("div");
+      spouseInputDiv.className = "input-row";
 
-            groceryGroups.forEach((grocery, idx) => {
-              const option = document.createElement("option");
-              option.value = idx + 1;
-              option.textContent = `Group ${idx + 1} - ${grocery}`;
-              // Default: same number as group
-              if (idx + 1 === group.group) {
-                option.selected = true;
-              }
-              select.appendChild(option);
-            });
+      const spouseInput = document.createElement("input");
+      spouseInput.type = "text";
+      spouseInput.placeholder = "Enter spouse name";
+      spouseInput.className = "spouse-input";
+      spouseInput.value = memberData.spouse || "";
 
-            tdAssign.appendChild(select);
-            tr.appendChild(tdAssign);
+      spouseInput.addEventListener("change", () => {
+        updateMemberData(key, "spouse", spouseInput.value);
+      });
 
-            tbody.appendChild(tr);
-          });
-        }
+      spouseInputDiv.appendChild(spouseInput);
+      spouseDiv.appendChild(spouseInputDiv);
+      groupDiv.appendChild(spouseDiv);
 
-        // Create a group UI element
-        function createGroupElement(key, memberData) {
-          const groupDiv = document.createElement("div");
-          groupDiv.className = "group";
-          groupDiv.dataset.key = key;
+      // Dependents Section
+      const dependentsDiv = document.createElement("div");
+      dependentsDiv.className = "dependents";
 
-          // Main member header
-          const header = document.createElement("h3");
-          header.textContent = `Main Member: ${memberData.name}`;
-          groupDiv.appendChild(header);
+      const dependentLabel = document.createElement("div");
+      dependentLabel.className = "section-label";
+      dependentLabel.textContent = "Dependents:";
+      dependentsDiv.appendChild(dependentLabel);
 
-          // Spouse Section
-          const spouseDiv = document.createElement("div");
-          spouseDiv.className = "spouse-section";
+      // Add existing dependents
+      memberData.dependents.forEach((dependent, index) => {
+        const dependentDiv = document.createElement("div");
+        dependentDiv.className = "dependent";
 
-          const spouseLabel = document.createElement("div");
-          spouseLabel.className = "section-label";
-          spouseLabel.textContent = "Spouse:";
-          spouseDiv.appendChild(spouseLabel);
+        const dependentInput = document.createElement("input");
+        dependentInput.type = "text";
+        dependentInput.placeholder = "Enter dependent name";
+        dependentInput.value = dependent.name || "";
 
-          const spouseInputDiv = document.createElement("div");
-          spouseInputDiv.className = "input-row";
+        dependentInput.addEventListener("change", () => {
+          updateMemberData(
+            key,
+            "dependents",
+            index,
+            "name",
+            dependentInput.value
+          );
+        });
 
-          const spouseInput = document.createElement("input");
-          spouseInput.type = "text";
-          spouseInput.placeholder = "Enter spouse name";
-          spouseInput.className = "spouse-input";
-          spouseInput.value = memberData.spouse || "";
+        dependentDiv.appendChild(dependentInput);
+        dependentsDiv.appendChild(dependentDiv);
+      });
 
-          spouseInput.addEventListener("change", () => {
-            updateMemberData(key, "spouse", spouseInput.value);
-          });
+      groupDiv.appendChild(dependentsDiv);
 
-          spouseInputDiv.appendChild(spouseInput);
-          spouseDiv.appendChild(spouseInputDiv);
-          groupDiv.appendChild(spouseDiv);
+      return groupDiv;
+    }
 
-          // Dependents Section
-          const dependentsDiv = document.createElement("div");
-          dependentsDiv.className = "dependents";
+    // Fix: updateMemberData function for in-memory mode
+    function updateMemberData(key, field, ...args) {
+      const updates = {};
+      if (field === "spouse") {
+        updates[`members/${key}/spouse`] = args[0];
+      } else if (field === "dependents") {
+        const depIndex = args[0];
+        const depValue = args[2];
+        updates[`members/${key}/dependents/${depIndex}`] = { name: depValue };
+      }
+      update(ref(db), updates);
+    }
 
-          const dependentLabel = document.createElement("div");
-          dependentLabel.className = "section-label";
-          dependentLabel.textContent = "Dependents:";
-          dependentsDiv.appendChild(dependentLabel);
+    // Fix: Render all groups
+    // Instead of this:
+    // initializeData();
+    // renderAllGroups();
 
-          // Add existing dependents
-          memberData.dependents.forEach((dependent, index) => {
-            const dependentDiv = document.createElement("div");
-            dependentDiv.className = "dependent";
+    // ✅ Do this instead:
+    const membersRef = ref(db, "members");
+    onValue(membersRef, (snapshot) => {
+      const data = snapshot.val();
+      renderAllGroups(data);
+    });
 
-            const dependentInput = document.createElement("input");
-            dependentInput.type = "text";
-            dependentInput.placeholder = "Enter dependent name";
-            dependentInput.value = dependent.name || "";
+    // Fix: Dependents input rendering (ensure always 12 inputs)
+    function createGroupElement(key, memberData) {
+      const groupDiv = document.createElement("div");
+      groupDiv.className = "group";
+      groupDiv.dataset.key = key;
 
-            dependentInput.addEventListener("change", () => {
-              updateMemberData(
-                key,
-                "dependents",
-                index,
-                "name",
-                dependentInput.value
-              );
-            });
+      // Main member header
+      const header = document.createElement("h3");
+      header.textContent = `Main Member: ${memberData.name}`;
+      groupDiv.appendChild(header);
 
-            dependentDiv.appendChild(dependentInput);
-            dependentsDiv.appendChild(dependentDiv);
-          });
+      // Spouse Section
+      const spouseDiv = document.createElement("div");
+      spouseDiv.className = "spouse-section";
 
-          groupDiv.appendChild(dependentsDiv);
+      const spouseLabel = document.createElement("div");
+      spouseLabel.className = "section-label";
+      spouseLabel.textContent = "Spouse:";
+      spouseDiv.appendChild(spouseLabel);
 
-          return groupDiv;
-        }
+      const spouseInputDiv = document.createElement("div");
+      spouseInputDiv.className = "input-row";
 
-        // Fix: updateMemberData function for in-memory mode
-        function updateMemberData(key, field, ...args) {
-          if (!isFirebaseEnabled) {
-            if (field === "spouse") {
-              membersData[key].spouse = args[0];
-            } else if (field === "dependents") {
-              const depIndex = args[0];
-              const depField = args[1];
-              const depValue = args[2];
-              if (!membersData[key].dependents[depIndex]) {
-                membersData[key].dependents[depIndex] = { name: "" };
-              }
-              membersData[key].dependents[depIndex][depField] = depValue;
-            }
-            renderAllGroups();
-          }
-          // Add Firebase update logic here if needed
-        }
+      const spouseInput = document.createElement("input");
+      spouseInput.type = "text";
+      spouseInput.placeholder = "Enter spouse name";
+      spouseInput.className = "spouse-input";
+      spouseInput.value = memberData.spouse || "";
 
-        // Fix: Render all groups
-        function renderAllGroups() {
-          const container = document.getElementById("groupsContainer");
-          container.innerHTML = "";
-          Object.entries(membersData).forEach(([key, memberData]) => {
-            container.appendChild(createGroupElement(key, memberData));
-          });
-          // Hide loading message
-          document.getElementById("loadingMessage").style.display = "none";
-        }
+      spouseInput.addEventListener("change", () => {
+        updateMemberData(key, "spouse", spouseInput.value);
+      });
 
-        // Fix: Dependents input rendering (ensure always 12 inputs)
-        function createGroupElement(key, memberData) {
-          const groupDiv = document.createElement("div");
-          groupDiv.className = "group";
-          groupDiv.dataset.key = key;
+      spouseInputDiv.appendChild(spouseInput);
+      spouseDiv.appendChild(spouseInputDiv);
+      groupDiv.appendChild(spouseDiv);
 
-          // Main member header
-          const header = document.createElement("h3");
-          header.textContent = `Main Member: ${memberData.name}`;
-          groupDiv.appendChild(header);
+      // Dependents Section
+      const dependentsDiv = document.createElement("div");
+      dependentsDiv.className = "dependents";
 
-          // Spouse Section
-          const spouseDiv = document.createElement("div");
-          spouseDiv.className = "spouse-section";
+      const dependentLabel = document.createElement("div");
+      dependentLabel.className = "section-label";
+      dependentLabel.textContent = "Dependents:";
+      dependentsDiv.appendChild(dependentLabel);
 
-          const spouseLabel = document.createElement("div");
-          spouseLabel.className = "section-label";
-          spouseLabel.textContent = "Spouse:";
-          spouseDiv.appendChild(spouseLabel);
+      // Always render 12 dependents
+      for (let i = 0; i < 12; i++) {
+        const dependentDiv = document.createElement("div");
+        dependentDiv.className = "dependent";
 
-          const spouseInputDiv = document.createElement("div");
-          spouseInputDiv.className = "input-row";
+        const dependentInput = document.createElement("input");
+        dependentInput.type = "text";
+        dependentInput.placeholder = "Enter dependent name";
+        dependentInput.value =
+          (memberData.dependents[i] && memberData.dependents[i].name) || "";
 
-          const spouseInput = document.createElement("input");
-          spouseInput.type = "text";
-          spouseInput.placeholder = "Enter spouse name";
-          spouseInput.className = "spouse-input";
-          spouseInput.value = memberData.spouse || "";
+        dependentInput.addEventListener("change", () => {
+          updateMemberData(key, "dependents", i, "name", dependentInput.value);
+        });
 
-          spouseInput.addEventListener("change", () => {
-            updateMemberData(key, "spouse", spouseInput.value);
-          });
+        dependentDiv.appendChild(dependentInput);
+        dependentsDiv.appendChild(dependentDiv);
+      }
 
-          spouseInputDiv.appendChild(spouseInput);
-          spouseDiv.appendChild(spouseInputDiv);
-          groupDiv.appendChild(spouseDiv);
+      groupDiv.appendChild(dependentsDiv);
 
-          // Dependents Section
-          const dependentsDiv = document.createElement("div");
-          dependentsDiv.className = "dependents";
+      return groupDiv;
+    }
 
-          const dependentLabel = document.createElement("div");
-          dependentLabel.className = "section-label";
-          dependentLabel.textContent = "Dependents:";
-          dependentsDiv.appendChild(dependentLabel);
-
-          // Always render 12 dependents
-          for (let i = 0; i < 12; i++) {
-            const dependentDiv = document.createElement("div");
-            dependentDiv.className = "dependent";
-
-            const dependentInput = document.createElement("input");
-            dependentInput.type = "text";
-            dependentInput.placeholder = "Enter dependent name";
-            dependentInput.value =
-              (memberData.dependents[i] && memberData.dependents[i].name) || "";
-
-            dependentInput.addEventListener("change", () => {
-              updateMemberData(key, "dependents", i, "name", dependentInput.value);
-            });
-
-            dependentDiv.appendChild(dependentInput);
-            dependentsDiv.appendChild(dependentDiv);
-          }
-
-          groupDiv.appendChild(dependentsDiv);
-
-          return groupDiv;
-        }
-
-        // Initialize and render on page load
-        initializeData();
-        renderAllGroups();
-        initializeBuyingGroupsTable();
+    // Initialize and render on page load
+    renderAllGroups();
+    initializeBuyingGroupsTable();
   </script>
 </html>
